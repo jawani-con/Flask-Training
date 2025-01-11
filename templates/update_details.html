@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Membership Details</title>
+</head>
+<body>
+    <h1>Update Membership Details</h1>
+    
+    <!-- Fetching Details -->
+    <form action="/update_details" method="POST">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" name="username" placeholder="Enter Username" required><br>
+        </div>
+        <button type="submit">Fetch Details</button>
+    </form>
+
+    <!-- If user exists, show membership details -->
+    {% if user %}
+        <h2>Membership Details for {{ user.username }}</h2>
+        <form action="/update_details" method="POST">
+            <input type="hidden" name="username" value="{{ user.username }}">
+
+            <div>
+                <label for="membership_date">Membership Date:</label>
+                <input type="date" name="membership_date" value="{{ membership_details.membership_date }}" required><br>
+            </div>
+            <div>
+                <label for="membership_time">Membership Time:</label>
+                <input type="time" name="membership_time" value="{{ membership_details.membership_time }}" required><br>
+            </div>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    {% endif %}
+
+</body>
+</html>

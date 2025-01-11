@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+</head>
+<body>
+    <h1>User Details</h1>
+
+    {% if user %}
+        <h2>User Information</h2>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>Role:</strong> {{ user.role }}</p>
+        
+        {% if membership_details %}
+            <h2>Membership Details</h2>
+            <p><strong>Membership Date:</strong> {{ membership_details.membership_date }}</p>
+            <p><strong>Membership Time:</strong> {{ membership_details.membership_time }}</p>
+        {% else %}
+            <p>No membership details found for this user.</p>
+        {% endif %}
+    {% else %}
+        <p>User not found.</p>
+    {% endif %}
+</body>
+</html>
