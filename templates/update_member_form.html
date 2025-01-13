@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Member Details</title>
+</head>
+<body>
+    <h1>Update Member Details</h1>
+    <form action="/update_member" method="post">
+        <input type="hidden" name="id" value="{{ user.id }}">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" name="username" value="{{ user.username }}"><br>
+        </div>
+        <div>
+            <label for="membership_date">Membership Date (YYYY-MM-DD):</label>
+            <input type="date" name="membership_date" value="{{ membership_details.membership_date if membership_details else '' }}"><br>
+        </div>
+        <div>
+            <label for="membership_time">Membership Duration:</label>
+            <input type="text" name="membership_time" value="{{ membership_details.membership_time if membership_details else '' }}"><br>
+        </div>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

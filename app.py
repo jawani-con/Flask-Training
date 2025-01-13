@@ -96,6 +96,92 @@ def add_member():
 
     return render_template('add_member.html')
 
+# @app.route('/update_member', methods=['GET', 'POST'])
+# def update_member():
+#     if request.method == 'POST':
+#         id = request.form.get('id') 
+
+#         if not id:
+#             return "User id required"
+        
+#         user=Fitness.query.filter_by(id=id).first() 
+#         if not user:
+#             return f"User with {id} does not exist"
+        
+#         membership_details=user.membership_details
+#         username = request.form.get('username')
+#         membership_date = request.form.get('membership_date')
+#         membership_time = request.form.get('membership_time')
+
+#         if username:
+#             user.username = username
+
+#         if membership_details:
+#             if membership_date:
+#                 membership_details.membership_date = datetime.strptime(membership_date, "%Y-%m-%d").date()
+#             if membership_time:
+#                 membership_details.membership_time = membership_time
+#         else:
+#             new_membership_details = MembershipDetails(
+#                 user_id=user.id,
+#                 membership_date=datetime.strptime(membership_date, "%Y-%m-%d").date(),
+#                 membership_time=membership_time
+#             )
+#             db.session.add(new_membership_details)
+
+#         db.session.commit()
+
+#         return redirect(url_for("admin_home"))
+
+#     return render_template('update_member.html')
+
+@app.route('/update_member', methods=['GET', 'POST'])
+def update_member():
+    if request.method == 'POST':
+        id = request.form.get('id')
+
+        if not id:
+            return "User ID is required!", 400
+
+        user = Fitness.query.filter_by(id=id).first()
+
+        if not user:
+            return f"User with ID {id} does not exist!", 404
+
+        if 'username' in request.form:
+            username = request.form.get('username')
+            membership_date = request.form.get('membership_date')
+            membership_time = request.form.get('membership_time')
+
+            if username:
+                user.username = username
+
+            membership_details = user.membership_details
+            if membership_details:
+                if membership_date:
+                    membership_details.membership_date = datetime.strptime(membership_date, "%Y-%m-%d").date()
+                if membership_time:
+                    membership_details.membership_time = membership_time
+            else:
+                new_membership_details = MembershipDetails(
+                    user_id=user.id,
+                    membership_date=datetime.strptime(membership_date, "%Y-%m-%d").date() if membership_date else None,
+                    membership_time=membership_time
+                )
+                db.session.add(new_membership_details)
+
+            db.session.commit()
+            return redirect(url_for('admin_home'))
+
+        return render_template(
+            'update_member_form.html',
+            user=user,
+            membership_details=user.membership_details
+        )
+
+    return render_template('update_member.html')
+
+
 @app.route('/delete_member', methods=['GET', 'POST'])
 def delete_member():
     if request.method == 'POST':
@@ -123,6 +209,28 @@ def view_details():
     membership_details = user.membership_details
 
     return render_template('view_details.html', user=user, membership_details=membership_details)
+
+@app.route('/renew_membership', methods=['GET', 'POST'])
+def renew_membership():
+
+    if request.method == 'POST':
+        print("POST request received for /renew_membership")
+        print(f"Form Data: {request.form}")
+        membership_date = request.form.get('membership_date')
+        membership_time = request.form.get('membership_time')
+
+        if not membership_date or not membership_time:
+            return "Membership date and time are required!"
+
+        membership_details = current_user.membership_details
+        if not membership_details:
+            return "Membership details not found to renew."
+
+        membership_details.membership_date = datetime.strptime(membership_date, "%Y-%m-%d").date()
+        membership_details.membership_time = membership_time
+        db.session.commit()
+ 
+    return render_template('renew_membership.html')
 
 if __name__ == "__main__":
     with app.app_context():
