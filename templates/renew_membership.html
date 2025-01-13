@@ -3,22 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Renew Membership</title>
 </head>
 <body>
-    <h1>Renew Membership Details</h1>
-    <form action="/renew_membership" method="get">
-        <div>
-            <label for="membership_date">Membership Date:</label>
-            <input type="date" name="membership_date" required>
-        </div>
-        
-        <div>
-            <label for="membership_time">Membership Time:</label>
-            <input type="text" name="membership_time" required>
-        </div>
-        
-        <button type="submit" value="Send form">Renew Membership</button>
-    </form>    
+    <h1>Renew Membership</h1>
+    <p>Membership Date: {{ membership_details.membership_date }}</p>
+    <p>Membership Duration: {{ membership_details.membership_time }}</p>
+
+    <form action="/renew_membership" method="post">
+        <button type="submit">Renew Membership</button>
+    </form>
 </body>
 </html>
